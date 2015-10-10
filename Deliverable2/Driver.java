@@ -1,12 +1,17 @@
 public class Driver{
-	int start;
+	Location current_loc;
 	
-	public Driver(int loc){
-		start = loc;
+	public Driver(Location loc){
+		current_loc = loc;
 	}
 	
-	public int get_start(){
-		return start;
+	public Location get_driver_loc(){
+		return current_loc;
 	}
+	
+	public void set_driver_loc(Location new_loc){
+		current_loc = new_loc;
+	}
+	
 
 }

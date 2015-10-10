@@ -2,62 +2,54 @@
 import java.util.Random;
 
 
-
 public class City {
+
+	public static boolean check(String arg){
+		boolean isInt = true;
+		try{
+			Long.parseLong(arg);
+		}catch(NumberFormatException e){
+			isInt = false;
+		}
+		return isInt;
+	}
 		
 	public static void main(String[] args){
-		int[][] arr = new int[][]{ //index: {num_opt, opt_1, opt_2}
-			{1, 1, -1},
-			{2, 2, 3},
-			{2, 4, 6},
-			{2, 1, 7},
-			{2, 2, 3},
-			{1, 4, -1},
-			{0, -1, -1},
-			{0, -1, -1}
-		}; 
-		String[] locations = new String[] {"Outside City", "Mall", "Bookstore", "Coffee Shop", "University", "Outside City", "Outside City", "Outside City"};
-
-		String[][] roads = new String[8][8];
-		roads[0][1] = "Fourth Ave.";
-		roads[1][2] = "Fourth Ave.";
-		roads[1][3] = "Meow St.";
-		roads[2][4] = "Chirp St.";
-		roads[2][6] = "Fourth Ave.";
-		roads[3][1] = "Meow St.";
-		roads[3][7] = "Fifth Ave.";
-		roads[4][2] = "Chirp St.";
-		roads[4][3] = "Fifth Ave";
-		roads[5][4] = "Fifth Ave";		
+		if (args.length == 0){
+			System.out.println("Please enter an integer seed");
+			System.exit(1);
+		}
+		if (args.length > 1){
+			System.out.println("Too many arguments entered. Please enter one integer seed.");
+			System.exit(1);
+		}
+		if (!check(args[0])){
+			System.out.println("Not an integer. Please enter one integer seed.");
+			System.exit(1);
+		}
 	
-		Random rand = new Random();
-		Driver d1 = new Driver(rand.nextInt(6));
-		int curr_loc = d1.get_start();
-		System.out.println("Start at " + locations[curr_loc]);
-		int dest; 
+	
+		long seed = Long.parseLong(args[0]);	
+		Random rand = new Random(seed);
 		
-		while( true ) {
-			int num_opt = arr[curr_loc][0];
-			
-			if (num_opt == 0){
-				System.out.println("Driver 1 has left the city!");
-				break;
-			}
-			else if(num_opt == 1){
-				dest = arr[curr_loc][1];
-				System.out.println("Driver 1 heading from " + locations[curr_loc] + " to " + locations[dest] + " via " + roads[curr_loc][dest]);
-			}
-			else{
-				int temp = rand.nextInt(2);//0 or 1
-				dest = arr[curr_loc][temp+1];
-				System.out.println("Driver 1 heading from " + locations[curr_loc] + " to " + locations[dest] + " via " + roads[curr_loc][dest]);
-			}
-			curr_loc = dest;
-		}	
-	
-	}
-	
-	
-	
-	
-}
+		for(int i=1; i<5; i++){
+			Driver d1 = new Driver(new Location(rand.nextInt(5)));//0 to 4 inclusive
+			System.out.println("Starting Location: " + (d1.get_driver_loc()).get_location_index());
+			Location curr_loc;
+			while(true){
+				curr_loc = d1.get_driver_loc();
+				
+				if(curr_loc.get_location_index() == 5){
+					System.out.println("Driver " + i + " has left the city!\n");
+					break;
+				}//end if
+				else{
+					Location destination = curr_loc.get_next_destination();
+					String road = curr_loc.get_road(destination);
+					System.out.println("Driver " + i + " headed from " + curr_loc.get_location_name() + " to " + destination.get_location_name() + " via " + road);
+					d1.set_driver_loc(destination);
+				}//end else
+			}//end while
+		}//end for	
+	}//end main		
+}//end City class
