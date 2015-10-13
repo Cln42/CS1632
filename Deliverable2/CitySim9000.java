@@ -80,7 +80,7 @@ public class CitySim9000 {
 		return still_driving;
 	}
 
-	// main method. Get's the user's input, sets up random number generator
+	// main method. Gets the user's input, sets up random number generator
 	// creates a driver, and then calls driveAround
 	public static void main(String[] args) {
 		getArguments(args);
